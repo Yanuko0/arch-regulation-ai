@@ -1,0 +1,143 @@
+{
+  "common": {
+    "appName": "建築法規 AI 助手",
+    "tagline": "精準引用法規，AI 智慧解答",
+    "loading": "載入中...",
+    "error": "發生錯誤，請稍後再試",
+    "retry": "重試",
+    "close": "關閉",
+    "save": "儲存",
+    "cancel": "取消",
+    "confirm": "確認",
+    "logout": "登出",
+    "login": "Google 登入",
+    "analyticsDashboard": "法規數據分析",
+    "deleteConfirm": "確定要刪除此對話嗎？",
+    "backToChat": "返回對話",
+    "analyticsTitle": "建築法規數據分析",
+    "quotaExceeded": "AI 額度不足或已耗盡，請聯絡管理員或稍後再試。",
+    "footer": "© 2024 建築法規 AI 助手 — 所有 AI 回答皆依據公開法規資料，僅供參考"
+  },
+  "nav": {
+    "chat": "AI 問答",
+    "calculator": "計算器",
+    "history": "歷史紀錄",
+    "about": "關於"
+  },
+  "landing": {
+    "heroTitle": "建築法規",
+    "heroTitleAccent": "AI 智慧助手",
+    "heroDesc": "精準引用公開法規原文，每則回答皆標註條款來源，支援台灣、日本、美國、韓國等多國法規查詢。",
+    "startChat": "開始提問",
+    "feature1Title": "條款精準引用",
+    "feature1Desc": "AI 回答皆附條款編號，點擊可展開查看完整原文",
+    "feature2Title": "多國法規支援",
+    "feature2Desc": "涵蓋台灣、日本、美國、韓國等地區",
+    "feature3Title": "多語系介面",
+    "feature3Desc": "支援繁中、英文、日文、韓文四種語系",
+    "selectRegionTitle": "選擇查詢地區",
+    "selectRegionDesc": "請先選擇您要查詢的建築法規所在地區",
+    "coreFeatures": "核心功能",
+    "featureTagline": "專為建築師設計"
+  },
+  "chat": {
+    "placeholder": "請輸入您的建築法規問題，例如：第二種住宅區的建蔽率上限是多少？",
+    "send": "送出",
+    "newSession": "新對話",
+    "sessionHistory": "歷史對話",
+    "thinking": "AI 正在查詢法規中...",
+    "citationsTitle": "引用條款",
+    "expandCitation": "展開條文內容",
+    "collapseCitation": "收起條文內容",
+    "relevance": "相關度",
+    "viewSource": "查看原始法規",
+    "noSessions": "尚無對話紀錄",
+    "sessionCount": "{count} 則對話",
+    "emptyState": "請輸入您的建築法規問題開始諮詢",
+    "emptyStateDesc": "AI 將根據公開法規資料回答，並標註引用條款",
+    "sendHint": "Enter 送出",
+    "inputPlaceholder": "輸入問題..."
+  },
+  "disclaimer": {
+    "title": "⚠️ 免責聲明",
+    "content": "本回答由 AI 依據公開法規資料生成，僅供參考，不構成正式法律意見。實際建築法規適用應以主管機關最新公告為準，建議諮詢合格建築師或相關專業人員。"
+  },
+  "calculator": {
+    "title": "建蔽率 / 容積率試算",
+    "desc": "輸入基地條件，AI 從法規原文推理計算",
+    "question": "查詢問題",
+    "questionPlaceholder": "例如：第二種住宅區 500 平方公尺的建蔽率與容積率上限？",
+    "landArea": "基地面積（m²）",
+    "landAreaPlaceholder": "例如：500",
+    "zoneType": "用地分區",
+    "zoneTypePlaceholder": "例如：第二種住宅區",
+    "buildingUsage": "建築用途",
+    "buildingUsagePlaceholder": "例如：住宅",
+    "calculate": "開始試算",
+    "calculating": "AI 試算中...",
+    "result": "試算結果",
+    "noResult": "請輸入問題後點擊試算",
+    "disclaimer": "試算結果僅供參考，以主管機關核定為準。"
+  },
+  "region": {
+    "selectRegion": "選擇地區",
+    "currentRegion": "目前地區",
+    "saved": "地區偏好已儲存",
+    "tw": "台灣",
+    "jp": "日本",
+    "us": "美國",
+    "sg": "新加坡",
+    "kr": "韓國"
+  },
+  "language": {
+    "select": "語系",
+    "zhTW": "繁體中文",
+    "en": "English",
+    "ja": "日本語",
+    "ko": "한국어"
+  },
+  "embed": {
+    "poweredBy": "Powered by 建築法規 AI 助手",
+    "openFull": "開啟完整版"
+  },
+  "onboarding": {
+    "title": "開始使用",
+    "authTitle": "1. 選擇身份",
+    "regionTitle": "2. 選擇法規地區",
+    "googleLogin": "Google 登入",
+    "guestMode": "訪客模式",
+    "country": "國家",
+    "subRegion": "縣市 / 行政區",
+    "allRegions": "全部地區",
+    "enterSystem": "進入系統",
+    "loggedIn": "已登入",
+    "logout": "登出",
+    "guestMode": "訪客模式"
+  },
+  "analytics": {
+    "title": "法規查詢數據分析",
+    "desc": "即時掌握各地區建築法規熱點與市場趨勢",
+    "allRegions": "所有地區 (全國)",
+    "timeRange1m": "近 1 個月",
+    "timeRange3m": "近 3 個月",
+    "timeRange6m": "近半年",
+    "anomalyDetection": "異常暴增偵測",
+    "marketDemand": "新興市場需求",
+    "hottestRegion": "最熱門潛力區",
+    "distributionTitle": "各地區法規查詢量分佈",
+    "rankingTitle": "熱門問題類型排行榜",
+    "crossAnalysisTitle": "區域 vs 類型 交叉分析",
+    "trendTitle": "熱門法規需求成長趨勢",
+    "needLogin": "需要登入權限",
+    "needLoginDesc": "法規數據分析儀表板會統整全站使用者的查詢歷史來產生大數據分析，您必須使用 Google 登入後才能存取此功能。"
+  },
+  "categories": {
+    "違建查詢": "違建查詢",
+    "老屋翻新": "老屋翻新",
+    "商業裝修法規": "商業裝修法規",
+    "建蔽率與容積率": "建蔽率與容積率",
+    "無障礙相關": "無障礙相關",
+    "防火避難法規": "防火避難法規",
+    "其他": "其他"
+  }
+}

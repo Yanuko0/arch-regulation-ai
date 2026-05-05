@@ -1,26 +1,290 @@
+/* app/globals.css — 建築法規 AI 助手設計系統 (Architech Style) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
+/* ─── CSS 設計 Token ─────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 主色調：純黑與深鋅色 */
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #09090b; /* zinc-950 */
+  --color-bg-card: rgba(39, 39, 42, 0.4); /* zinc-800/40 */
+  --color-bg-card-hover: rgba(39, 39, 42, 0.6);
+  --color-bg-glass: rgba(9, 9, 11, 0.85);
+
+  /* 強調色：建築藍圖青 / 純白 */
+  --color-accent: #ffffff; /* 按鈕主要使用純白 */
+  --color-accent-blue: #0ea5e9; /* sky-500 用於品牌提示線 */
+  --color-accent-blue-dim: rgba(14, 165, 233, 0.1);
+
+  /* 語意色 */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* 文字色 */
+  --color-text-primary: #fafafa; /* zinc-50 */
+  --color-text-secondary: #a1a1aa; /* zinc-400 */
+  --color-text-muted: #52525b; /* zinc-600 */
+
+  /* 邊框 */
+  --color-border: #27272a; /* zinc-800 */
+  --color-border-accent: rgba(255, 255, 255, 0.2);
+
+  /* 尺寸 */
+  --sidebar-width: 280px;
+  --header-height: 64px;
+
+  /* 圓角 */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* 陰影 */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── 重置與基礎 ──────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── 通用元件樣式 ────────────────────────────────────────────────────────── */
+
+/* 玻璃態卡片 */
+.glass-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background 0.2s, border-color 0.2s;
+}
+.glass-card:hover { background: var(--color-bg-card-hover); }
+
+/* 主按鈕 (純白藥丸) */
+.btn-accent {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-accent:hover {
+  transform: translateY(-1px);
+  background: #f4f4f5;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+}
+.btn-accent:active { transform: translateY(0); box-shadow: none; }
+.btn-accent:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 幽靈按鈕 */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-ghost:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+}
+
+/* 輸入框 (藥丸狀) */
+.input-field {
+  background: #09090b;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  padding: 12px 16px;
+  font-size: 15px;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+.input-field::placeholder { color: var(--color-text-muted); }
+.input-field:focus {
+  border-color: #52525b;
+  background: #000000;
+}
+
+/* Textarea */
+textarea.input-field {
+  border-radius: var(--radius-lg);
+  resize: none;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* 標籤 (標註風格) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-secondary);
+}
+.badge-accent {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* ─── 捲軸美化 ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+/* ─── 動畫 ────────────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in    { animation: fadeIn 0.3s ease both; }
+.animate-slide-in   { animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* 打字游標動畫 */
+.typing-cursor::after {
+  content: '▌';
+  color: var(--color-text-primary);
+  animation: pulse-dot 0.8s ease infinite;
+}
+
+/* ─── Markdown 渲染樣式 (極簡風格) ───────────────────────────────────────── */
+.markdown-content {
+  color: var(--color-text-primary);
+  line-height: 1.8;
+  font-size: 15px;
+}
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+  color: #ffffff;
+  margin: 1.5em 0 0.75em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.markdown-content h3 { font-size: 1.1em; }
+.markdown-content p { margin: 0.75em 0; }
+.markdown-content ul, .markdown-content ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+.markdown-content li { margin: 0.25em 0; }
+.markdown-content code {
+  background: #18181b;
+  color: #e4e4e7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #27272a;
+  font-size: 0.85em;
+  font-family: 'Courier New', Courier, monospace;
+}
+.markdown-content pre {
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+.markdown-content blockquote {
+  border-left: 2px solid var(--color-border);
+  padding-left: 16px;
+  color: var(--color-text-secondary);
+  margin: 1em 0;
+  font-style: italic;
+}
+.markdown-content hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5em 0;
+}
+.markdown-content strong { color: #ffffff; font-weight: 600; }
+
+/* 條款標記樣式（極簡風格） */
+.citation-tag {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-size: 0.75em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0 4px;
+  vertical-align: middle;
+}
+.citation-tag:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
 }
