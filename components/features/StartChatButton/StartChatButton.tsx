@@ -18,7 +18,7 @@ interface StartChatButtonProps {
 export function StartChatButton({ locale, labels }: StartChatButtonProps) {
   const router = useRouter();
   const { regionCode, setRegion, subRegion, setSubRegion } = useRegionStore();
-  const { user, loginWithGoogle, logout } = useAuth();
+  const { user, loginWithGoogle, logout, authError, loading: authLoading } = useAuth();
 
   const t = useTranslations('onboarding');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +31,11 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
   };
 
   const handleEnterChat = () => {
+    if (authMode === 'login' && !user) {
+      loginWithGoogle();
+      return;
+    }
+
     setIsModalOpen(false);
 
     // Auto map region to locale
@@ -40,14 +45,11 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
     else if (regionCode === 'KR') targetLocale = 'ko';
     else if (regionCode === 'US' || regionCode === 'GB') targetLocale = 'en';
 
-    // Check if user selected Google Login but hasn't logged in
-    if (authMode === 'login' && !user) {
-      loginWithGoogle();
-      return;
-    }
-
     router.push(`/${targetLocale}/chat`);
   };
+
+  // 判斷按鈕是否應該變更樣式或行為
+  const isLoginRequired = authMode === 'login' && !user;
 
   return (
     <>
@@ -185,11 +187,32 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
                 </div>
               </div>
 
+              {/* 錯誤訊息 */}
+              {authError && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium animate-shake">
+                  ⚠️ {authError}
+                </div>
+              )}
+
               <button
                 onClick={handleEnterChat}
-                className="w-full btn-accent py-5 rounded-[2rem] flex justify-center items-center gap-3 text-xl font-black tracking-[0.2em] shadow-[0_10px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_15px_40px_rgba(56,189,248,0.4)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] transition-all"
+                disabled={authLoading}
+                className={`w-full py-5 rounded-[2rem] flex justify-center items-center gap-3 text-xl font-black tracking-[0.2em] shadow-xl transition-all duration-300
+                  ${isLoginRequired 
+                    ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 cursor-pointer' 
+                    : 'btn-accent shadow-[0_10px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_15px_40px_rgba(56,189,248,0.4)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]'
+                  }
+                  ${authLoading ? 'opacity-50 cursor-wait' : ''}
+                `}
               >
-                {t('enterSystem')} <MapPin size={22} className="animate-bounce" />
+                {authLoading ? (
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    {isLoginRequired ? t('pleaseLoginFirst') : t('enterSystem')} 
+                    {!isLoginRequired && <MapPin size={22} className="animate-bounce" />}
+                  </>
+                )}
               </button>
             </div>
           </div >

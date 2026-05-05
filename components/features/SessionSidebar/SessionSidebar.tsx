@@ -27,7 +27,7 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
   const { sessions, setSessions, removeSession, currentSessionId } = useChatStore();
   const { regionCode, locale } = useRegionStore();
   const { isSidebarOpen, toggleSidebar } = useUIStore();
-  const { user, activeId, loginWithGoogle, logout, loading } = useAuth();
+  const { user, activeId, loginWithGoogle, logout, loading, authError, setAuthError } = useAuth();
 
   const currentRegion = REGIONS.find((r) => r.code === regionCode);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
@@ -270,6 +270,32 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
 
               </div>
 
+            </div>
+          </div>
+        </div>
+      )}
+      {/* 登入錯誤彈窗 */}
+      {authError && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[2rem] bg-zinc-900/90 border border-zinc-800 shadow-2xl p-8 box-border">
+            <div className="flex flex-col items-center justify-center text-center gap-5">
+              <div className="w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <AlertCircle size={30} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  登入提示
+                </h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  {authError}
+                </p>
+              </div>
+              <button
+                onClick={() => setAuthError(null)}
+                className="w-full h-11 rounded-xl text-sm font-bold bg-zinc-100 text-black hover:bg-white transition-all shadow-lg"
+              >
+                我知道了
+              </button>
             </div>
           </div>
         </div>

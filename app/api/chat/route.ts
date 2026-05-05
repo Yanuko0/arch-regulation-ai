@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     let searchResults: any[] = [];
     try {
       const embedding = await generateEmbedding(question);
-      searchResults = await searchRegulations(embedding, regionCode, 6);
+      searchResults = await searchRegulations(embedding, regionCode, 10);
     } catch (embErr: unknown) {
       const errorMsg = embErr instanceof Error ? embErr.message : 'Unknown error';
       console.warn('[chat/route] Embedding 或 Pinecone 搜尋失敗 (可能是額度耗盡):', errorMsg);

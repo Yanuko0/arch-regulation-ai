@@ -10,6 +10,7 @@ interface ChatStore {
   messages: ChatMessage[];
 
   // 串流狀態
+  streamingSessionId: string | null;
   streamingContent: string;
   streamingCitations: Citation[];
   isStreaming: boolean;
@@ -20,6 +21,7 @@ interface ChatStore {
   addSession: (session: ChatSession) => void;
   setMessages: (messages: ChatMessage[]) => void;
   addMessage: (message: ChatMessage) => void;
+  setStreamingSessionId: (id: string | null) => void;
   appendStreamingContent: (delta: string) => void;
   setStreamingCitations: (citations: Citation[]) => void;
   setIsStreaming: (val: boolean) => void;
@@ -34,6 +36,7 @@ export const useChatStore = create<ChatStore>()(
       currentSessionId: null,
       sessions: [],
       messages: [],
+      streamingSessionId: null,
       streamingContent: '',
       streamingCitations: [],
       isStreaming: false,
@@ -45,12 +48,13 @@ export const useChatStore = create<ChatStore>()(
       setMessages: (messages) => set({ messages }),
       addMessage: (message) =>
         set((state) => ({ messages: [...state.messages, message] })),
+      setStreamingSessionId: (id) => set({ streamingSessionId: id }),
       appendStreamingContent: (delta) =>
         set((state) => ({ streamingContent: state.streamingContent + delta })),
       setStreamingCitations: (citations) => set({ streamingCitations: citations }),
       setIsStreaming: (val) => set({ isStreaming: val }),
       resetStreaming: () =>
-        set({ streamingContent: '', streamingCitations: [], isStreaming: false }),
+        set({ streamingSessionId: null, streamingContent: '', streamingCitations: [], isStreaming: false }),
       clearMessages: () => set({ messages: [] }),
       removeSession: (id) =>
         set((state) => ({

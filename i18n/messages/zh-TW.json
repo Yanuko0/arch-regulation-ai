@@ -112,7 +112,8 @@
     "enterSystem": "進入系統",
     "loggedIn": "已登入",
     "logout": "登出",
-    "guestMode": "訪客模式"
+    "guestMode": "訪客模式",
+    "pleaseLoginFirst": "請先登入 Google"
   },
   "analytics": {
     "title": "法規查詢數據分析",

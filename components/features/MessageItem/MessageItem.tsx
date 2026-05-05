@@ -67,6 +67,7 @@ export function MessageItem({ message, locale = 'zh-TW', citationLabels }: Messa
             {message.citations && message.citations.length > 0 && (
               <CitationAccordion
                 citations={message.citations}
+                regionCode={message.metadata?.regionCode}
                 labels={citationLabels}
               />
             )}

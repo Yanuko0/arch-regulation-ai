@@ -28,6 +28,7 @@ export function useStreamingResponse() {
     resetStreaming,
     addMessage,
     setCurrentSession,
+    setStreamingSessionId,
     addSession,
   } = useChatStore();
 
@@ -43,6 +44,9 @@ export function useStreamingResponse() {
       setIsStreaming(true);
 
       let activeSessionId = payload.sessionId;
+      if (activeSessionId) {
+        setStreamingSessionId(activeSessionId);
+      }
 
       try {
         // Optimistic DB Save for User Message
@@ -56,6 +60,7 @@ export function useStreamingResponse() {
               guestId: payload.guestId,
             });
             setCurrentSession(activeSessionId);
+            setStreamingSessionId(activeSessionId);
             addSession({
               id: activeSessionId,
               title: payload.question.slice(0, 30),
@@ -84,7 +89,12 @@ export function useStreamingResponse() {
             sessionId: activeSessionId, 
             role: 'user', 
             content: payload.question,
-            category: detectCategory(payload.question)
+            category: detectCategory(payload.question),
+            metadata: {
+              regionCode: payload.regionCode,
+              subRegion: payload.subRegion,
+              locale: payload.locale,
+            }
           }).catch(() => {});
         }
 
@@ -124,6 +134,7 @@ export function useStreamingResponse() {
               if (event.type === 'session' && event.sessionId) {
                 finalSessionId = event.sessionId;
                 setCurrentSession(finalSessionId);
+                setStreamingSessionId(finalSessionId);
               } else if (event.type === 'delta' && event.content) {
                 fullContent += event.content;
                 appendStreamingContent(event.content);
@@ -140,6 +151,11 @@ export function useStreamingResponse() {
                   citations: finalCitations,
                   disclaimerShown: true,
                   createdAt: new Date(),
+                  metadata: {
+                    regionCode: payload.regionCode,
+                    subRegion: payload.subRegion,
+                    locale: payload.locale,
+                  },
                 });
                 
                 // 背景儲存 AI 回答至 Firebase
@@ -150,6 +166,11 @@ export function useStreamingResponse() {
                     content: fullContent,
                     citations: finalCitations,
                     disclaimerShown: true,
+                    metadata: {
+                      regionCode: payload.regionCode,
+                      subRegion: payload.subRegion,
+                      locale: payload.locale,
+                    },
                   }).catch(() => {});
                   
                   if (!payload.sessionId) {

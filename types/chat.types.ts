@@ -21,6 +21,11 @@ export interface ChatMessage {
   citations: Citation[];
   disclaimerShown: boolean;
   createdAt: Timestamp | Date;
+  metadata?: {
+    regionCode?: string;
+    subRegion?: string;
+    locale?: string;
+  };
 }
 
 export interface Citation {

@@ -40,8 +40,10 @@ export default function ChatPage() {
 
   const {
     messages, addMessage, setMessages, clearMessages,
+    sessions,
     currentSessionId, setCurrentSession,
     streamingContent, streamingCitations, isStreaming,
+    streamingSessionId,
     resetStreaming,
   } = useChatStore();
 
@@ -78,6 +80,14 @@ export default function ChatPage() {
     setCurrentSession(sessionId);
     clearMessages();
     setCalculatorOpen(false);
+
+    // 回復該對話的地區設定
+    const session = sessions.find((s) => s.id === sessionId);
+    if (session) {
+      if (session.regionCode) setRegion(session.regionCode);
+      if (session.subRegion) setSubRegion(session.subRegion);
+    }
+
     try {
       const data = await getMessages(sessionId);
       setMessages(data);
@@ -100,6 +110,11 @@ export default function ChatPage() {
       citations: [],
       disclaimerShown: false,
       createdAt: new Date(),
+      metadata: {
+        regionCode,
+        subRegion,
+        locale,
+      },
     };
     addMessage(userMsg);
     setPendingUserMsg(text);
@@ -271,8 +286,8 @@ export default function ChatPage() {
                 />
               ))}
 
-              {/* 串流中的 AI 回答 */}
-              {isStreaming && (
+              {/* 串流中的 AI 回答 (僅限當前對話正在串流時顯示) */}
+              {isStreaming && currentSessionId === streamingSessionId && (
                 <div className="flex gap-4">
                   <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base border bg-black border-zinc-700 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                     <Bot size={20} />

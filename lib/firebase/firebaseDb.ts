@@ -73,6 +73,11 @@ export async function saveMessage(data: {
   citations?: Citation[];
   disclaimerShown?: boolean;
   category?: string;
+  metadata?: {
+    regionCode?: string;
+    subRegion?: string;
+    locale?: string;
+  };
 }): Promise<string> {
   const ref = await addDoc(
     collection(db, 'sessions', data.sessionId, 'messages'),
@@ -82,6 +87,7 @@ export async function saveMessage(data: {
       citations: data.citations ?? [],
       disclaimerShown: data.disclaimerShown ?? false,
       category: data.category ?? '其他',
+      metadata: data.metadata ?? {},
       createdAt: Timestamp.now(),
     }
   );

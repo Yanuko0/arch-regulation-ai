@@ -41,25 +41,31 @@ export function mergeCitationsWithSearchResults(
   parsed: ParsedCitation[],
   searchResults: SearchResult[]
 ): Citation[] {
+  const getNumbers = (str: string) => str.replace(/\D/g, '');
+  
   return parsed.map((p, idx) => {
-    // 嘗試模糊匹配：來源名稱包含 + 條款編號相近
-    const matched = searchResults.find(
-      (r) =>
-        (r.metadata.source.includes(p.source) || p.source.includes(r.metadata.source)) &&
-        r.metadata.articleNumber.replace(/\s/g, '') === p.articleNumber.replace(/\s/g, '')
-    ) ?? searchResults.find(
+    const pNum = getNumbers(p.articleNumber);
+    // 1. 先嘗試精確匹配 (來源 + 條號)
+    const exactMatched = searchResults.find((r) => {
+      const rNum = getNumbers(r.metadata.articleNumber);
+      const isSourceMatch = r.metadata.source.includes(p.source) || p.source.includes(r.metadata.source);
+      return isSourceMatch && rNum === pNum && pNum !== '';
+    });
+
+    // 2. 若沒找到精確匹配，則回退到來源匹配 (僅用於顯示標題，但不顯示原文)
+    const sourceMatched = exactMatched || searchResults.find(
       (r) => r.metadata.source.includes(p.source) || p.source.includes(r.metadata.source)
     );
 
     return {
       id: `citation_${idx}_${Date.now()}`,
-      regulationId: matched?.id ?? '',
+      regulationId: exactMatched?.id ?? '',
       source: p.source,
       articleNumber: p.articleNumber,
-      articleTitle: matched?.metadata.articleTitle,
-      excerpt: matched?.metadata.content ?? '',
-      relevanceScore: matched?.score ?? 0,
-      url: matched?.metadata.url,
+      articleTitle: exactMatched?.metadata.articleTitle,
+      excerpt: exactMatched?.metadata.content ?? '', // 只有精確匹配才有原文
+      relevanceScore: exactMatched?.score ?? (sourceMatched?.score ? sourceMatched.score * 0.5 : 0),
+      url: exactMatched?.metadata.url || sourceMatched?.metadata.url,
       isExpanded: false,
     };
   });

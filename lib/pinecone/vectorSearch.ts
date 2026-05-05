@@ -10,11 +10,18 @@ export async function searchRegulations(
 ): Promise<SearchResult[]> {
   const index = getPineconeIndex();
 
+  console.log(`[Pinecone Debug] Querying with regionCode: "${regionCode}"`);
+  
   const results = await index.query({
     vector: embedding,
-    topK,
-    filter: { regionCode: { $eq: regionCode } },
+    topK: 20, 
+    filter: { regionCode: { $eq: regionCode } }, 
     includeMetadata: true,
+  });
+
+  console.log(`[Pinecone Search] Region: ${regionCode}, TopK: ${topK}, Found: ${results.matches?.length || 0}`);
+  results.matches?.forEach((m, i) => {
+    console.log(`  [${i}] ID: ${m.id}, Score: ${m.score?.toFixed(4)}, Article: ${m.metadata?.articleNumber}`);
   });
 
   return (results.matches ?? []).map((match) => ({
