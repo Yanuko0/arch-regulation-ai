@@ -50,7 +50,8 @@ export function InputBar({
   return (
     <div className="relative w-full" style={{ padding: '10px 15px' }}>
       <div
-        className="flex gap-4 items-end w-full glass-card p-3 md:p-4 rounded-[2rem] shadow-xl border-zinc-800 bg-[#09090b]/80">
+        className="flex gap-4 items-end w-full glass-card p-3 md:p-4 rounded-[2rem] shadow-xl border-[var(--color-border)] bg-[var(--color-bg-secondary)]/80"
+        suppressHydrationWarning={true}>
         {/* 文字輸入區 */}
         <div className="flex-1 relative" style={{ display: 'flex' }}>
           <textarea
@@ -68,7 +69,7 @@ export function InputBar({
           />
           {/* Shift+Enter 提示 */}
           {value.length > 0 && (
-            <span className="absolute bottom-4 right-16 text-xs text-zinc-600 pointer-events-none">
+            <span className="absolute bottom-4 right-16 text-xs text-[var(--color-text-muted)] pointer-events-none">
               {sendHint}
             </span>
           )}
@@ -80,8 +81,8 @@ export function InputBar({
             id="stop-stream-btn"
             onClick={onStop}
             className="shrink-0 h-14 w-14 rounded-full flex items-center justify-center
-                       bg-zinc-900 border border-zinc-700 text-white
-                       hover:bg-zinc-800 transition-colors shadow-md"
+                       bg-[var(--color-bg-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)]
+                       hover:bg-[var(--color-bg-card)] transition-colors shadow-md"
           >
             <Square size={20} fill="currentColor" />
           </button>
@@ -90,7 +91,7 @@ export function InputBar({
             id="send-message-btn"
             onClick={handleSend}
             disabled={!value.trim() || disabled}
-            className="shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-white text-black hover:bg-zinc-200 disabled:opacity-50 disabled:bg-zinc-800 disabled:text-zinc-500 transition-colors shadow-md"
+            className="shrink-0 h-14 w-14 rounded-full flex items-center justify-center bg-[var(--color-text-primary)] text-[var(--color-bg-primary)] hover:bg-[var(--color-text-secondary)] disabled:opacity-50 disabled:bg-[var(--color-bg-secondary)] disabled:text-[var(--color-text-muted)] transition-colors shadow-md"
           >
             <Send size={22} />
           </button>

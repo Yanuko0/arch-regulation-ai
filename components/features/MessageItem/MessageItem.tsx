@@ -8,6 +8,7 @@ import { CitationAccordion } from '@/components/ui/CitationAccordion/CitationAcc
 import { DisclaimerBanner } from '@/components/ui/DisclaimerBanner/DisclaimerBanner';
 import { getDisclaimerText } from '@/lib/utils/promptBuilder';
 import { stripCitationTags } from '@/lib/utils/citationParser';
+import { useAuth } from '@/hooks/useAuth';
 import type { ChatMessage } from '@/types/chat.types';
 
 interface MessageItemProps {
@@ -23,6 +24,7 @@ interface MessageItemProps {
 }
 
 export function MessageItem({ message, locale = 'zh-TW', citationLabels }: MessageItemProps) {
+  const { user } = useAuth();
   const isUser = message.role === 'user';
   const displayContent = isUser ? message.content : stripCitationTags(message.content);
 
@@ -32,13 +34,21 @@ export function MessageItem({ message, locale = 'zh-TW', citationLabels }: Messa
     >
       {/* 頭像 */}
       <div
-        className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base border
+        className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base border overflow-hidden
                     ${isUser
-            ? 'bg-zinc-900 border-zinc-800 text-zinc-100'
-            : 'bg-black border-zinc-700 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+            ? 'bg-[var(--color-bg-secondary)] border-[var(--color-border)] text-[var(--color-text-primary)]'
+            : 'bg-white border-[var(--color-border)] shadow-sm'
           }`}
       >
-        {isUser ? <User size={18} /> : <Bot size={20} />}
+        {isUser ? (
+          user?.photoURL ? (
+            <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
+          ) : (
+            <User size={18} />
+          )
+        ) : (
+          <img src="/bot-avatar.png" alt="Bot" className="w-full h-full object-cover" />
+        )}
       </div>
 
       {/* 氣泡內容 */}
@@ -46,14 +56,14 @@ export function MessageItem({ message, locale = 'zh-TW', citationLabels }: Messa
         <div
           className={`px-2 py-1 text-base leading-loose max-w-full
                       ${isUser
-              ? 'text-zinc-300'
-              : 'text-zinc-100 w-full'
+              ? 'text-[var(--color-text-secondary)]'
+              : 'text-[var(--color-text-primary)] w-full'
             }`}
         >
           {isUser ? (
             <p className="whitespace-pre-wrap">{message.content}</p>
           ) : (
-            <div className="markdown-content border-l-2 border-zinc-800 pl-6 ml-2">
+            <div className="markdown-content border-l-2 border-[var(--color-border)] pl-6 ml-2">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {displayContent}
               </ReactMarkdown>

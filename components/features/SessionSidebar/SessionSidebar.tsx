@@ -58,6 +58,7 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
         <div
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
           onClick={toggleSidebar}
+          suppressHydrationWarning={true}
         />
       )}
 
@@ -66,18 +67,19 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
         className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-zinc-800 h-full transition-transform duration-300 md:static md:shrink-0
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:hidden'}`}
         style={{ width: 'var(--sidebar-width)', background: 'var(--color-bg-secondary)' }}
+        suppressHydrationWarning={true}
       >
         {/* 品牌 Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-800" style={{ padding: '0 8px' }}>
+        <div className="flex items-center justify-between px-4 py-4 border-b border-[var(--color-border)]" style={{ padding: '0 8px' }}>
           <div className="flex items-center gap-2.5" style={{ padding: '5px 8px', width: '100%' }}>
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md">
-              <Building2 size={16} className="text-black" />
+            <div className="w-8 h-8 rounded-full bg-[var(--color-text-primary)] flex items-center justify-center shadow-md">
+              <Building2 size={16} className="text-[var(--color-bg-secondary)]" />
             </div>
             <div>
-              <div className="text-[20px] font-bold text-white tracking-wide">
+              <div className="text-[20px] font-bold text-[var(--color-text-primary)] tracking-wide">
                 {labels?.appName ?? '建築法規 AI'}
               </div>
-              <div className="flex items-center gap-1 text-[14px] text-slate-500">
+              <div className="flex items-center gap-1 text-[16px] text-[var(--color-text-secondary)] font-bold">
                 <span>{currentRegion?.flag}</span>
                 <span>{currentRegion?.nameI18n[locale] ?? regionCode}</span>
               </div>
@@ -85,7 +87,7 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
           </div>
           <button
             onClick={toggleSidebar}
-            className="flex items-center justify-center w-8 h-8 rounded-full border border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all shadow-sm shrink-0 ml-2"
+            className="flex items-center justify-center w-8 h-8 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)] transition-all shadow-sm shrink-0 ml-2"
             title="隱藏側欄"
           >
             <ChevronLeft size={16} />
@@ -93,25 +95,25 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
         </div>
 
         {/* 新對話按鈕 */}
-        <div className="p-3" style={{ padding: '0px 8px', margin: '10px 0px' }}>
+        <div className="p-3" style={{ padding: '0px 8px', margin: '10px 0px', fontWeight: '600', fontFamily: '"Noto Sans TC", sans-serif' }}>
           <button
             id="new-session-btn"
             onClick={onNewSession}
             className="btn-accent w-full justify-center gap-2 py-2.5 text-sm"
           >
-            <Plus size={15} />
+            <Plus size={20} />
             {labels?.newSession ?? '新對話'}
           </button>
         </div>
 
         {/* 歷史對話列表 */}
-        <div className="flex-1 overflow-y-auto px-2 pb-4" style={{ padding: '5px 8px' }}>
-          <div className="text-[14px] text-slate-600 uppercase tracking-wider px-2 mb-2" style={{ paddingBottom: '10px' }}>
+        <div className="flex-1 overflow-y-auto px-2 pb-4" style={{ padding: '5px 8px', color: 'var(--color-text-primary)', fontFamily: '"Noto Sans TC", sans-serif', fontWeight: '600' }}>
+          <div className="text-[20px] text-[var(--color-text-secondary)] uppercase tracking-wider px-2 mb-2" style={{ paddingBottom: '10px', color: 'var(--color-text-primary)', fontFamily: '"Noto Sans TC", sans-serif', fontWeight: '500' }}>
             {labels?.sessionHistory ?? '歷史對話'}
           </div>
 
           {sessions.length === 0 ? (
-            <div className="text-center py-8 text-slate-600 text-xs">
+            <div className="text-center py-8 text-[var(--color-text-muted)] text-xs">
               {labels?.noSessions ?? '尚無對話紀錄'}
             </div>
           ) : (
@@ -124,14 +126,16 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
-                    padding: '3px 10px'
+                    padding: '8px 10px',
+                    margin: '3px 0px',
+                    fontSize: '14px'
                   }}
                   className={`w-full text-left px-3 py-2.5 rounded-xl text-xs transition-all
                             flex items-center gap-2 group relative cursor-pointer
                             ${currentSessionId === session.id
-                      ? 'bg-zinc-800/80 text-white font-medium border-zinc-700'
-                      : 'hover:bg-zinc-900/50 text-zinc-400 hover:text-zinc-200 border-transparent'
-                    } border`}
+                      ? 'bg-[var(--color-accent-blue-dim)] text-[var(--color-text-primary)] border border-[var(--color-accent-blue)]/20 shadow-sm'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)] border border-transparent hover:border-[var(--color-border)]'
+                    }`}
                 >
                   <MessageSquare size={13} className="shrink-0 opacity-60" />
                   <span className="flex-1 line-clamp-1">{session.title || '未命名對話'}</span>
@@ -152,27 +156,28 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
         </div>
 
         {/* 底部登入/登出與儀表板區域 */}
-        <div className="p-4 border-t border-zinc-800/50 space-y-3 bg-black/20" style={{ padding: '8px', margin: '8px 0px' }}>
+        <div className="p-4 border-t border-[var(--color-border)] space-y-3 bg-[var(--color-bg-secondary)]/30" style={{ padding: '8px', margin: '8px 0px' }}>
           {user && (
             <Link
               href={`/${locale}/analytics`}
               style={{
-                height: '40px'
+                height: '48px',
+                fontFamily: '"Noto Sans TC", sans-serif',
               }}
-              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-xs bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-all font-bold border border-sky-500/20 shadow-lg shadow-sky-500/5"
+              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-[14px] bg-[var(--color-accent-blue)] text-white hover:bg-white hover:text-[var(--color-accent-blue)] hover:scale-[1.05] hover:shadow-2xl hover:shadow-[var(--color-accent-blue)]/40 transition-all duration-300 font-extrabold no-underline border-2 border-transparent hover:border-[var(--color-accent-blue)]"
             >
-              <PieChart size={15} />
-              {t('analyticsDashboard')}
+              <PieChart size={20} className="transition-colors duration-300" />
+              <span>{t('analyticsDashboard')}</span>
             </Link>
           )}
           {!loading && (
             user ? (
-              <div className="flex flex-col bg-zinc-900/40" style={{ width: '100%', margin: '10px 0px', padding: '0px 10px' }}>
-                <div className="flex items-center gap-2 px-1" style={{ padding: '20px 0px' }}>
-                  <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-[16px] font-bold text-sky-400">
+              <div className="flex flex-col bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)]" style={{ width: '100%', margin: '10px 0px', padding: '0px 10px' }}>
+                <div className="flex items-center gap-2 px-1" style={{ padding: '20px 8px' }}>
+                  <div className="w-9 h-9 rounded-full bg-[var(--color-accent-blue)]/10 flex items-center justify-center text-[16px] font-bold text-[var(--color-accent-blue)] border border-[var(--color-accent-blue)]/20">
                     {user.email?.[0].toUpperCase()}
                   </div>
-                  <div className="text-[14px] text-zinc-500 truncate flex-1">
+                  <div className="text-[13px] font-medium text-[var(--color-text-primary)] truncate flex-1">
                     {user.email}
                   </div>
                 </div>
@@ -180,10 +185,9 @@ export function SessionSidebar({ onNewSession, onSelectSession, labels }: Sessio
                   onClick={logout}
                   style={{
                     height: '40px',
-                    border: '0.2px solid rgba(255, 255, 255, 0.5)',
                     cursor: 'pointer'
                   }}
-                  className="w-full text-center px-3 py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-red-400 hover:bg-red-500/5 transition-all border border-transparent hover:border-red-500/10"
+                  className="w-full text-center px-3 py-2 rounded-lg text-xs font-semibold text-[var(--color-text-muted)] hover:text-red-500 hover:bg-red-500/5 transition-all border-t border-[var(--color-border)]"
                 >
                   {t('logout')}
                 </button>

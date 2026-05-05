@@ -16,6 +16,7 @@
     "backToChat": "Back to Chat",
     "analyticsTitle": "Regulation Analytics",
     "quotaExceeded": "AI quota exceeded or depleted. Please contact admin or try later.",
+    "pleaseLoginFirst": "Please sign in with Google first",
     "footer": "© 2024 Architecture Regulation AI — All AI responses are based on public data for reference only"
   },
   "nav": {

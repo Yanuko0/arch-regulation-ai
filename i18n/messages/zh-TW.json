@@ -16,6 +16,7 @@
     "backToChat": "返回對話",
     "analyticsTitle": "建築法規數據分析",
     "quotaExceeded": "AI 額度不足或已耗盡，請聯絡管理員或稍後再試。",
+    "pleaseLoginFirst": "請先登入 Google",
     "footer": "© 2024 建築法規 AI 助手 — 所有 AI 回答皆依據公開法規資料，僅供參考"
   },
   "nav": {

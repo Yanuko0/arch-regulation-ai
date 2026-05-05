@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
           // 判斷當前要使用的 AI Provider 與模型
           const provider = process.env.ACTIVE_AI_PROVIDER || 'openai';
           const aiClient = provider === 'gemini' ? geminiClient : openaiClient;
-          const modelName = provider === 'gemini' 
+          const modelName = provider === 'gemini'
             ? (process.env.GEMINI_CHAT_MODEL || 'gemini-2.5-flash')
             : (process.env.OPENAI_CHAT_MODEL || 'gpt-4o');
 
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
           enqueue({ type: 'done', messageId, sessionId: sessionId || `local_session_${Date.now()}` });
         } catch (err: any) {
           console.error('[chat/route] AI Completion Error:', err);
-          
+
           // 檢查是否為額度耗盡 (429)
           if (err.status === 429 || err.message?.includes('quota') || err.message?.includes('429')) {
             enqueue({ type: 'error', code: 'QUOTA_EXCEEDED' });
@@ -127,8 +127,8 @@ export async function POST(req: NextRequest) {
           }
 
           // 其他錯誤則使用模擬模式備援
-          const mockText = `⚠️ **系統忙碌中 (Mock Mode)** ⚠️\n\n由於目前 AI 服務暫時無法連線，系統已自動切換為模擬模式。\n\n針對您的問題：**「${question}」**\n\n請稍後再試，或檢查 API Key 額度是否充足。`;
-          
+          const mockText = `⚠️ **系統忙碌中 (Mock Mode)**\n\n由於目前 AI 服務暫時無法連線，系統已自動切換為模擬模式。\n\n針對您的問題：**「${question}」**\n\n請稍後再試，或檢查 API Key 額度是否充足。`;
+
           for (const char of mockText) {
             fullContent += char;
             enqueue({ type: 'delta', content: char });

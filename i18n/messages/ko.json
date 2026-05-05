@@ -16,6 +16,7 @@
     "backToChat": "대화로 돌아가기",
     "analyticsTitle": "건축 법규 데이터 분석",
     "quotaExceeded": "AI 할당량이 부족하거나 소진되었습니다. 관리자에게 문의하거나 나중에 다시 시도해 주세요.",
+    "pleaseLoginFirst": "먼저 Google로 로그인해 주세요",
     "footer": "© 2024 건축법규 AI 어시스턴트 — 모든 AI 답변은 공개 자료를 기반으로 하며 참고용입니다"
   },
   "nav": {

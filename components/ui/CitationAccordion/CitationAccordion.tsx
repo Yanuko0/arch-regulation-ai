@@ -45,17 +45,17 @@ export function CitationAccordion({ citations, regionCode: historicalRegionCode,
 
   return (
     <div
-      className="mt-4 px-[15px] rounded-[8px] overflow-hidden border border-zinc-800 bg-zinc-950 animate-fade-in"
+      className="mt-4 px-[15px] rounded-[8px] overflow-hidden border border-[var(--color-border)] bg-[var(--color-bg-secondary)]/30 animate-fade-in shadow-sm"
       style={{ animationDelay: '0.2s', padding: '8px' }}
     >
-      <div className="flex items-center gap-2 px-5 py-3.5 bg-zinc-900 border-b border-zinc-800">
-        <FileText size={20} className="text-sky-400" />
-        <span className="font-semibold text-zinc-300 uppercase tracking-widest font-size-[20px]">
+      <div className="flex items-center gap-2 px-5 py-3.5 bg-[var(--color-bg-secondary)]/50 border-b border-[var(--color-border)]">
+        <FileText size={20} className="text-[var(--color-accent-blue)]" />
+        <span className="font-semibold text-[var(--color-text-primary)] uppercase tracking-widest text-[13px]">
           {labels?.title ?? 'Referenced Articles'} ({citations.length})
         </span>
       </div>
 
-      <div className="divide-y divide-zinc-800">
+      <div className="divide-y divide-[var(--color-border)]">
         {citations.map((citation) => {
           const isExpanded = expandedIds.has(citation.id);
           const pct = Math.round(citation.relevanceScore * 100);
@@ -67,16 +67,16 @@ export function CitationAccordion({ citations, regionCode: historicalRegionCode,
                 onClick={() => toggle(citation.id, citation)}
                 aria-expanded={isExpanded}
                 className="w-full flex items-center justify-between px-5 py-4 text-left
-                           hover:bg-zinc-900 transition-colors duration-200 group"
+                           hover:bg-[var(--color-bg-card)] transition-colors duration-200 group"
               >
                 <div className="flex flex-col gap-1 min-w-0" style={{ padding: '3px 5px' }}>
-                  <span className="text-sm font-semibold text-white truncate">
+                  <span className="text-sm font-semibold text-[var(--color-text-primary)] truncate">
                     {citation.source}
                   </span>
-                  <span className="text-xs text-sky-400 font-medium">
+                  <span className="text-xs text-[var(--color-accent-blue)] font-medium">
                     {citation.articleNumber}
                     {citation.articleTitle && (
-                      <span className="text-zinc-500 font-normal ml-1">
+                      <span className="text-[var(--color-text-muted)] font-normal ml-1">
                         — {citation.articleTitle}
                       </span>
                     )}
@@ -86,20 +86,20 @@ export function CitationAccordion({ citations, regionCode: historicalRegionCode,
                 <div className="flex items-center gap-2 ml-3 shrink-0">
                   {pct > 0 && (
                     <div className="flex items-center gap-1.5">
-                      <div className="w-16 h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+                      <div className="w-16 h-1.5 rounded-full bg-[var(--color-bg-secondary)] overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-300 transition-all"
+                          className="h-full rounded-full bg-gradient-to-r from-[var(--color-accent-blue)] to-sky-300 transition-all"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-[10px] text-zinc-500 w-8 text-right">
+                      <span className="text-[10px] text-[var(--color-text-secondary)] w-8 text-right">
                         {pct}%
                       </span>
                     </div>
                   )}
                   {isExpanded
-                    ? <ChevronUp size={16} className="text-zinc-400" />
-                    : <ChevronDown size={16} className="text-zinc-500 group-hover:text-white transition-colors" />
+                    ? <ChevronUp size={16} className="text-[var(--color-text-secondary)]" />
+                    : <ChevronDown size={16} className="text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
                   }
                 </div>
               </button>
@@ -107,24 +107,24 @@ export function CitationAccordion({ citations, regionCode: historicalRegionCode,
               {isExpanded && (
                 <div className="px-5 pb-5 animate-fade-in-up">
                   <div
-                    className="bg-black border border-zinc-800 rounded-[8px] p-5
-                                text-sm text-zinc-300 leading-loose whitespace-pre-wrap
-                                font-mono text-[13px]"
-                    style={{ margin: '8px 0px', padding: '5px 12px' }}
+                    className="bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-[8px] p-5
+                                text-sm text-[var(--color-text-secondary)] leading-loose whitespace-pre-wrap
+                                font-mono text-[13px] shadow-inner"
+                    style={{ margin: '8px 0px', padding: '12px' }}
                   >
                     {currentContent ? (
                       currentContent
                     ) : (
                       <div className="flex flex-col gap-3 py-2">
-                        <div className="flex items-center gap-3 text-sky-400/80 mb-1">
-                          <div className="w-4 h-4 rounded-full border-2 border-sky-500/30 border-t-sky-500 animate-spin" />
+                        <div className="flex items-center gap-3 text-[var(--color-accent-blue)] mb-1">
+                          <div className="w-4 h-4 rounded-full border-2 border-[var(--color-accent-blue)]/30 border-t-[var(--color-accent-blue)] animate-spin" />
                           <span className="text-xs font-medium tracking-wider">正在檢索法規資料庫...</span>
                         </div>
                         <div className="space-y-3 animate-pulse">
-                          <div className="h-4 bg-zinc-800/50 rounded-md w-full" />
-                          <div className="h-4 bg-zinc-800/50 rounded-md w-[92%]" />
-                          <div className="h-4 bg-zinc-800/50 rounded-md w-[95%]" />
-                          <div className="h-4 bg-zinc-800/50 rounded-md w-[40%]" />
+                          <div className="h-4 bg-[var(--color-bg-secondary)] rounded-md w-full" />
+                          <div className="h-4 bg-[var(--color-bg-secondary)] rounded-md w-[92%]" />
+                          <div className="h-4 bg-[var(--color-bg-secondary)] rounded-md w-[95%]" />
+                          <div className="h-4 bg-[var(--color-bg-secondary)] rounded-md w-[40%]" />
                         </div>
                       </div>
                     )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Building2, X, User as UserIcon, LogIn, MapPin } from 'lucide-react';
+import { Building2, X, User as UserIcon, LogIn, ChevronRight, Loader2, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { REGIONS } from '@/constants/regions';
 import { useRegionStore } from '@/stores/regionStore';
@@ -18,9 +18,10 @@ interface StartChatButtonProps {
 export function StartChatButton({ locale, labels }: StartChatButtonProps) {
   const router = useRouter();
   const { regionCode, setRegion, subRegion, setSubRegion } = useRegionStore();
-  const { user, loginWithGoogle, logout, authError, loading: authLoading } = useAuth();
+  const { user, loginWithGoogle, logout, authError, loading: authLoading, isLoggingIn } = useAuth();
 
   const t = useTranslations('onboarding');
+  const tCommon = useTranslations('common');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'guest' | 'login'>('guest');
 
@@ -30,7 +31,7 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
     setIsModalOpen(true);
   };
 
-  const handleEnterChat = () => {
+  const handleEnterSystem = () => {
     if (authMode === 'login' && !user) {
       loginWithGoogle();
       return;
@@ -64,34 +65,34 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-8 backdrop-blur-md bg-black/60 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-8 backdrop-blur-md bg-[var(--color-bg-primary)]/40 overflow-y-auto" suppressHydrationWarning={true}>
           <div className="absolute inset-0" onClick={() => setIsModalOpen(false)} />
 
-          <div style={{ padding: '20px' }} className="relative glass-card w-full max-w-xl border-zinc-700 bg-zinc-950/95 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden animate-fade-in-up rounded-[2.5rem]">
+          <div style={{ padding: '20px' }} className="relative glass-card w-full max-w-xl border-[var(--color-border)] bg-[var(--color-bg-glass)] shadow-2xl overflow-hidden animate-fade-in-up rounded-[2.5rem]">
             {/* 裝飾光暈 */}
-            <div className="absolute -top-32 -right-32 w-80 h-80 bg-sky-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute -top-32 -right-32 w-80 h-80 bg-[var(--color-accent-blue)]/10 rounded-full blur-[100px] pointer-events-none" />
             <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div style={{ margin: '5px 0px' }} className="flex items-center justify-between p-10 pb-6">
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">{t('title')}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="p-2 rounded-full hover:bg-zinc-800 text-zinc-500 hover:text-white transition-all">
-                <X size={24} />
+              <h2 className="text-3xl font-extrabold text-[var(--color-text-primary)] tracking-tight">{t('title')}</h2>
+              <button onClick={() => setIsModalOpen(false)} className="p-2.5 rounded-full bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] hover:bg-[var(--color-accent-blue)] hover:text-white transition-all shadow-sm">
+                <X size={20} />
               </button>
             </div>
 
             <div className="p-10 pt-0 space-y-10" style={{ minHeight: '250px' }} >
               {/* 身份選擇 */}
               < div className="space-y-6">
-                <div style={{ fontSize: '20px', padding: "8px 5px" }} className="text-xs font-bold text-zinc-500 tracking-widest uppercase px-1">{t('authTitle')}</div>
+                <div style={{ fontSize: '20px', padding: "8px 5px" }} className="font-bold text-[var(--color-text-primary)] tracking-wide">{t('authTitle')}</div>
                 {user ? (
-                  <div className="flex flex-col sm:flex-row items-center gap-4 p-6 rounded-[2rem] bg-zinc-900/40 border border-zinc-800/60 backdrop-blur-md">
+                  <div className="flex flex-col sm:flex-row items-center gap-4 p-6 rounded-[2rem] bg-[var(--color-bg-secondary)]/40 border border-[var(--color-border)] backdrop-blur-md">
                     <div className="flex items-center gap-4 flex-1 overflow-hidden w-full">
-                      <div className="w-14 h-14 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-400 font-bold text-2xl border border-sky-500/20 shrink-0 shadow-inner">
+                      <div className="w-14 h-14 rounded-2xl bg-[var(--color-accent-blue)]/10 flex items-center justify-center text-[var(--color-accent-blue)] font-bold text-2xl border border-[var(--color-accent-blue)]/20 shrink-0 shadow-inner">
                         {user.email?.[0].toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-base font-bold text-white truncate">{user.email}</div>
-                        <div className="text-xs text-sky-500/80 font-medium">{t('loggedIn')}</div>
+                        <div className="text-base font-bold text-[var(--color-text-primary)] truncate">{user.email}</div>
+                        <div className="text-xs text-[var(--color-accent-blue)]/80 font-medium">{t('loggedIn')}</div>
                       </div>
                     </div>
                     <button
@@ -99,8 +100,8 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
                         logout();
                         setAuthMode('guest');
                       }}
-                      style={{ display: "flex", flexDirection: "row", padding: "10px 12px", margin: "0px 10px", backgroundColor: "red", color: "white", fontSize: '14px' }}
-                      className="w-full sm:w-auto rounded-2xl text-xs font-bold bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-all border border-zinc-700/50 shadow-lg active:scale-95"
+                      style={{ display: "flex", flexDirection: "row", padding: "10px 12px", margin: "0px 10px", backgroundColor: "#ef4444", color: "white", fontSize: '14px' }}
+                      className="w-full sm:w-auto rounded-2xl text-xs font-bold hover:bg-red-600 transition-all shadow-lg active:scale-95"
                     >
                       {t('logout')}
                     </button>
@@ -113,9 +114,9 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
                         setAuthMode('login');
                       }}
                       style={{ display: "flex", flexDirection: "row", padding: "8px" }}
-                      className={`group flex flex-col items-center justify-center gap-4 p-8 rounded-[2rem] border transition-all duration-300 shadow-xl active:scale-95 ${authMode === 'login'
-                        ? 'border-sky-500/50 bg-sky-500/10'
-                        : 'border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/60 hover:border-zinc-700'
+                      className={`group flex flex-col items-center justify-center gap-4 p-8 rounded-[2rem] border transition-all duration-300 shadow-sm active:scale-95 ${authMode === 'login'
+                        ? 'border-[var(--color-accent-blue)]/50 bg-[var(--color-accent-blue)]/10'
+                        : 'border-[var(--color-border)] bg-[var(--color-bg-secondary)]/30 hover:bg-[var(--color-bg-card)]'
                         }`}
                     >
                       <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
@@ -126,21 +127,21 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
                           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                         </svg>
                       </div>
-                      <span className="text-sm font-bold text-white group-hover:text-sky-400 transition-colors">{t('googleLogin')}</span>
+                      <span className="text-sm font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-blue)] transition-colors">{t('googleLogin')}</span>
                     </button>
                     <button
                       onClick={() => setAuthMode('guest')}
                       style={{ display: "flex", flexDirection: "row", padding: "8px" }}
-                      className={`group flex flex-col items-center justify-center gap-4 p-8 rounded-[2rem] border transition-all duration-300 shadow-xl active:scale-95 ${authMode === 'guest'
-                        ? 'border-sky-500/50 bg-sky-500/10'
-                        : 'border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/60 hover:border-zinc-700'
+                      className={`group flex flex-col items-center justify-center gap-4 p-8 rounded-[2rem] border transition-all duration-300 shadow-sm active:scale-95 ${authMode === 'guest'
+                        ? 'border-[var(--color-accent-blue)]/50 bg-[var(--color-accent-blue)]/10'
+                        : 'border-[var(--color-border)] bg-[var(--color-bg-secondary)]/30 hover:bg-[var(--color-bg-card)]'
                         }`}
                     >
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg group-hover:scale-110 ${authMode === 'guest' ? 'bg-sky-500 text-white shadow-sky-500/30' : 'bg-zinc-800 text-zinc-500'
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg group-hover:scale-110 ${authMode === 'guest' ? 'bg-[var(--color-accent-blue)] text-white shadow-sky-500/30' : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)]'
                         }`}>
                         <UserIcon size={28} />
                       </div>
-                      <span className="text-sm font-bold group-hover:text-sky-400 transition-colors">{t('guestMode')}</span>
+                      <span className="text-sm font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-blue)] transition-colors">{t('guestMode')}</span>
                     </button>
                   </div>
                 )}
@@ -148,37 +149,37 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
 
               {/* 地區選擇 */}
               <div className="space-y-6" style={{ margin: "10px 0px 20px 0px" }}>
-                <div style={{ fontSize: '20px', padding: "8px 5px" }} className="text-xs font-bold text-zinc-500 tracking-widest uppercase px-1">{t('regionTitle')}</div>
+                <div style={{ fontSize: '20px', padding: "8px 5px" }} className="font-bold text-[var(--color-text-primary)] tracking-wide">{t('regionTitle')}</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[16px] text-zinc-500 uppercase tracking-widest px-1">{t('country')}</label>
+                    <label className="text-[16px] font-bold text-[var(--color-text-secondary)] px-1">{t('country')}</label>
                     <select
                       value={regionCode}
                       onChange={(e) => {
                         setRegion(e.target.value);
                         setSubRegion('ALL');
                       }}
-                      className="w-full input-field text-sm py-4 px-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 text-white focus:border-sky-500/50 transition-all shadow-inner"
+                      className="w-full input-field text-sm py-4 px-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50 text-[var(--color-text-primary)] focus:border-[var(--color-accent-blue)]/50 transition-all shadow-inner"
                     >
                       {REGIONS.map((r) => (
-                        <option key={r.code} value={r.code}>
+                        <option key={r.code} value={r.code} className="bg-[var(--color-bg-primary)]">
                           {r.flag} {r.nameI18n[locale] ?? r.nameI18n['en']}
                         </option>
                       ))}
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[16px] text-zinc-500 uppercase tracking-widest px-1">{t('subRegion')}</label>
+                    <label className="text-[16px] font-bold text-[var(--color-text-secondary)] px-1">{t('subRegion')}</label>
                     <select
                       value={subRegion}
                       onChange={(e) => setSubRegion(e.target.value)}
                       disabled={!selectedCountry.subRegions}
                       style={{ fontSize: '16px' }}
-                      className="w-full input-field text-sm py-4 px-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 text-white focus:border-sky-500/50 transition-all disabled:opacity-50 shadow-inner"
+                      className="w-full input-field text-sm py-4 px-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50 text-[var(--color-text-primary)] focus:border-[var(--color-accent-blue)]/50 transition-all disabled:opacity-50 shadow-inner"
                     >
-                      <option value="ALL">{t('allRegions')}</option>
+                      <option value="ALL" className="bg-[var(--color-bg-primary)]">{t('allRegions')}</option>
                       {selectedCountry.subRegions?.map((sr) => (
-                        <option key={sr.code} value={sr.code}>
+                        <option key={sr.code} value={sr.code} className="bg-[var(--color-bg-primary)]">
                           {sr.nameI18n[locale] ?? sr.nameI18n['en']}
                         </option>
                       ))}
@@ -189,31 +190,44 @@ export function StartChatButton({ locale, labels }: StartChatButtonProps) {
 
               {/* 錯誤訊息 */}
               {authError && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium animate-shake">
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 text-xs font-medium animate-shake">
                   ⚠️ {authError}
                 </div>
               )}
 
-              <button
-                onClick={handleEnterChat}
-                disabled={authLoading}
-                className={`w-full py-5 rounded-[2rem] flex justify-center items-center gap-3 text-xl font-black tracking-[0.2em] shadow-xl transition-all duration-300
-                  ${isLoginRequired 
-                    ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 cursor-pointer' 
-                    : 'btn-accent shadow-[0_10px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_15px_40px_rgba(56,189,248,0.4)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]'
-                  }
-                  ${authLoading ? 'opacity-50 cursor-wait' : ''}
-                `}
-              >
-                {authLoading ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <>
-                    {isLoginRequired ? t('pleaseLoginFirst') : t('enterSystem')} 
-                    {!isLoginRequired && <MapPin size={22} className="animate-bounce" />}
-                  </>
+              {/* 開始按鈕 */}
+              <div className="pt-6 relative group/btn">
+                {isLoginRequired && (
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-red-500 text-white text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                    {tCommon('pleaseLoginFirst')}
+                  </div>
                 )}
-              </button>
+                <button
+                  onClick={handleEnterSystem}
+                  disabled={isLoginRequired || authLoading || isLoggingIn}
+                  style={{
+                    cursor: (isLoginRequired || isLoggingIn) ? 'not-allowed' : 'pointer',
+                    padding: "10px 0"
+                  }}
+                  className={`w-full py-8 rounded-[2.5rem] font-extrabold text-xl tracking-[0.2em] uppercase transition-all duration-500 shadow-2xl flex items-center justify-center gap-4
+                    ${(isLoginRequired || isLoggingIn)
+                      ? 'bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)] cursor-not-allowed grayscale'
+                      : 'bg-gradient-to-r from-[#2c3e50] to-[#34495e] text-white hover:from-[var(--color-accent-blue)] hover:to-[#38bdf8] hover:scale-[1.02] hover:shadow-[var(--color-accent-blue)]/40 active:scale-95'
+                    }`}
+                >
+                  {(authLoading || isLoggingIn) ? (
+                    <>
+                      <Loader2 className="animate-spin" size={24} />
+                      {t('loggingIn')}
+                    </>
+                  ) : (
+                    <>
+                      {t('enterSystem')}
+                      <MapPin size={24} className={isLoginRequired ? '' : 'animate-bounce'} />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div >
         </div >

@@ -16,6 +16,7 @@
     "backToChat": "チャットに戻る",
     "analyticsTitle": "法規データ分析",
     "quotaExceeded": "AIの利用枠が不足しているか使い果たされました。管理者に連絡するか、後でもう一度お試しください。",
+    "pleaseLoginFirst": "まずGoogleでログインしてください",
     "footer": "© 2024 建築法規 AI アシスタント — すべてのAI回答は公開資料に基づいており、参考情報です"
   },
   "nav": {

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Bot, Menu, Globe } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useRouter, useParams } from 'next/navigation';
 import { SessionSidebar } from '@/components/features/SessionSidebar/SessionSidebar';
 import { MessageItem } from '@/components/features/MessageItem/MessageItem';
@@ -154,7 +155,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--color-bg-primary)' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--color-bg-primary)' }} suppressHydrationWarning={true}>
       {/* ── Sidebar ─────────────────────────────────────────── */}
       <SessionSidebar
         onNewSession={handleNewSession}
@@ -216,10 +217,15 @@ export default function ChatPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {/* 主題切換 */}
+            <ThemeToggle />
+
+            <div className="w-px h-4 bg-zinc-800" />
+
             {/* 語系切換 */}
             <div className="flex items-center gap-1">
-              <Globe size={13} className="text-slate-500" />
+              <Globe size={18} className="text-slate-500" />
               <select
                 id="locale-selector"
                 value={locale}
@@ -251,13 +257,14 @@ export default function ChatPage() {
               {/* 空狀態 */}
               {messages.length === 0 && !isStreaming && !pendingUserMsg && (
                 <div className="flex flex-col items-center justify-center h-full text-center py-20 px-4">
-                  <div className="w-20 h-20 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-6 shadow-lg">
-                    <Bot size={36} className="text-white" />
+                  <div className="w-20 h-20 rounded-full bg-white border border-[var(--color-border)] flex items-center justify-center mb-6 shadow-lg animate-fade-in overflow-hidden">
+                    <img src="/bot-avatar.png" alt="Bot" className="w-full h-full object-cover" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white mb-3 tracking-wide">{t('emptyState')}</h2>
-                  <p className="text-base text-zinc-400 max-w-lg leading-loose">{t('emptyStateDesc')}</p>
+                  <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-3 tracking-wide">{t('emptyState')}</h2>
+                  <p className="text-base text-[var(--color-text-secondary)] max-w-lg leading-loose">{t('emptyStateDesc')}</p>
+
                   {/* 示範問題 */}
-                  <div className="mt-10 flex flex-wrap gap-4 justify-center">
+                  <div className="mt-10 flex flex-wrap gap-4 justify-center" style={{ padding: '8px 15px' }}>
                     {[
                       regionCode === 'TW' ? '第二種住宅區建蔽率上限？' : 'What is the maximum building coverage ratio?',
                       regionCode === 'TW' ? '違章建築如何處理？' : 'How are illegal structures handled?',
@@ -266,8 +273,9 @@ export default function ChatPage() {
                       <button
                         key={q}
                         onClick={() => handleSend(q)}
-                        className="text-sm font-medium px-6 py-3 rounded-full border border-zinc-700 bg-zinc-900/50 text-zinc-300
-                                   hover:bg-white hover:text-black hover:border-white hover:-translate-y-1 transition-all duration-300 shadow-md hover:shadow-lg"
+                        style={{ padding: '8px 12px' }}
+                        className="text-sm font-medium px-6 py-3 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)]
+                                   hover:bg-[var(--color-accent-blue)] hover:text-white hover:border-[var(--color-accent-blue)] hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md"
                       >
                         {q}
                       </button>
@@ -289,7 +297,7 @@ export default function ChatPage() {
               {/* 串流中的 AI 回答 (僅限當前對話正在串流時顯示) */}
               {isStreaming && currentSessionId === streamingSessionId && (
                 <div className="flex gap-4">
-                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base border bg-black border-zinc-700 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base border bg-[var(--color-bg-primary)] border-[var(--color-text-secondary)] text-[var(--color-text-primary)] shadow-sm">
                     <Bot size={20} />
                   </div>
                   <div className="flex flex-col gap-3 flex-1 min-w-0 items-start">

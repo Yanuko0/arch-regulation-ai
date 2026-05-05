@@ -34,18 +34,23 @@ export function useAuth() {
 
   const activeId = user ? user.uid : guestId;
 
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   const loginWithGoogle = async () => {
+    if (isLoggingIn) return;
+    setIsLoggingIn(true);
     setAuthError(null);
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err: any) {
-      console.error('Google 登入失敗', err);
-      
       // 過濾掉使用者主動關閉或重複點擊視窗的情況
       const ignoredErrors = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
       if (ignoredErrors.includes(err?.code)) {
+        setIsLoggingIn(false);
         return;
       }
+
+      console.error('Google 登入失敗', err);
 
       if (err?.code === 'auth/configuration-not-found') {
         setAuthError('登入失敗：Firebase 後台尚未啟用 Google 登入功能。');
@@ -54,6 +59,8 @@ export function useAuth() {
       } else {
         setAuthError(`登入發生錯誤：${err?.message || '未知錯誤'}`);
       }
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -72,6 +79,7 @@ export function useAuth() {
     authError,
     setAuthError,
     loginWithGoogle,
+    isLoggingIn,
     logout,
   };
 }
