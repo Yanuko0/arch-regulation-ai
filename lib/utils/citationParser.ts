@@ -1,6 +1,7 @@
 // lib/utils/citationParser.ts
 import type { Citation } from '@/types/chat.types';
 import type { SearchResult } from '@/types/api.types';
+import { REGIONS } from '@/constants/regions';
 
 // AI 回答中的條款標記格式：[來源::條款編號]
 // 例：[建築法::第25條]、[Building Control Act::Section 8]
@@ -39,7 +40,8 @@ export function parseCitationsFromContent(content: string): ParsedCitation[] {
  */
 export function mergeCitationsWithSearchResults(
   parsed: ParsedCitation[],
-  searchResults: SearchResult[]
+  searchResults: SearchResult[],
+  regionCode?: string
 ): Citation[] {
   const getNumbers = (str: string) => str.replace(/\D/g, '');
   
@@ -57,6 +59,29 @@ export function mergeCitationsWithSearchResults(
       (r) => r.metadata.source.includes(p.source) || p.source.includes(r.metadata.source)
     );
 
+    let url = exactMatched?.metadata.url || sourceMatched?.metadata.url;
+
+    // 校正網址：確保與當前地區相符，或在缺失時從 REGIONS 常數補足
+    if (regionCode) {
+      const region = REGIONS.find((r) => r.code === regionCode);
+      if (region) {
+        const sourceInfo = region.regulationSources.find(
+          (s) => s.name.includes(p.source) || p.source.includes(s.name)
+        );
+        if (sourceInfo) {
+          try {
+            // 如果沒網址，或是網址的網域不符合該地區的預期 (例如在日本卻連向台灣法規網)
+            const expectedDomain = new URL(sourceInfo.url).hostname;
+            if (!url || !url.includes(expectedDomain)) {
+              url = sourceInfo.url;
+            }
+          } catch {
+            if (!url) url = sourceInfo.url;
+          }
+        }
+      }
+    }
+
     return {
       id: `citation_${idx}_${Date.now()}`,
       regulationId: exactMatched?.id ?? '',
@@ -65,7 +90,7 @@ export function mergeCitationsWithSearchResults(
       articleTitle: exactMatched?.metadata.articleTitle,
       excerpt: exactMatched?.metadata.content ?? '', // 只有精確匹配才有原文
       relevanceScore: exactMatched?.score ?? (sourceMatched?.score ? sourceMatched.score * 0.5 : 0),
-      url: exactMatched?.metadata.url || sourceMatched?.metadata.url,
+      url: url,
       isExpanded: false,
     };
   });

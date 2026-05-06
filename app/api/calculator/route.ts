@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     const answer = completion.choices[0]?.message?.content ?? '';
 
     const parsedCitations = parseCitationsFromContent(answer);
-    const citations = mergeCitationsWithSearchResults(parsedCitations, searchResults);
+    const citations = mergeCitationsWithSearchResults(parsedCitations, searchResults, regionCode);
 
     // 背景儲存 AI 回答到 Firebase
     if (sessionId && !sessionId.startsWith('local_')) {

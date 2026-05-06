@@ -9,6 +9,7 @@ export interface ChatSession {
   locale: string;
   title: string;
   messageCount: number;
+  isDeleted?: boolean;
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
 }

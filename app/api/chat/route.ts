@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
 
           // 解析條款引用
           const parsedCitations = parseCitationsFromContent(fullContent);
-          const citations = mergeCitationsWithSearchResults(parsedCitations, searchResults);
+          const citations = mergeCitationsWithSearchResults(parsedCitations, searchResults, regionCode);
 
           const messageId = `msg_${Date.now()}`;
 

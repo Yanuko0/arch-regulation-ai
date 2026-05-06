@@ -43,7 +43,7 @@ export async function getSessions(guestId: string, pageLimit = 20): Promise<Chat
   const snap = await getDocs(q);
   return snap.docs
     .map((d) => ({ id: d.id, ...d.data() } as ChatSession))
-    .filter((s: DocumentData) => s.guestId === guestId);
+    .filter((s: any) => s.guestId === guestId && !s.isDeleted);
 }
 
 export async function updateSessionTitle(sessionId: string, title: string): Promise<void> {
@@ -54,7 +54,10 @@ export async function updateSessionTitle(sessionId: string, title: string): Prom
 }
 
 export async function deleteSession(sessionId: string): Promise<void> {
-  await deleteDoc(doc(db, 'sessions', sessionId));
+  await updateDoc(doc(db, 'sessions', sessionId), {
+    isDeleted: true,
+    updatedAt: Timestamp.now(),
+  });
 }
 
 export async function updateSessionMetadata(sessionId: string, data: { regionCode?: string; subRegion?: string; locale?: string }): Promise<void> {
